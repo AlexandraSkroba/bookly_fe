@@ -1,0 +1,4 @@
+.home__wrapper div {
+  display: flex;
+  justify-content: center;
+}
