@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 
 export class Login extends Component {
+
   render() {
     return (
       <>
@@ -16,7 +17,7 @@ export class Login extends Component {
           </div>
           <div className="row mt-5">
             <div className="col-sm-12 text-center">
-              <Link to="password-recovery">Forgot your password?</Link>
+              <Link to="/auth/password-recovery">Forgot your password?</Link>
             </div>
           </div>
         </div>

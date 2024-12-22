@@ -3,9 +3,11 @@ import API_ENDPOINTS from "../../apiConfig";
 import { FormErrors } from "../../components/FormErrors/FormErrors";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../../AuthContext";
 
-const LoginForm = () => {
+const LoginForm = (props) => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const guardClosedSrc = process.env.PUBLIC_URL + '/images/guard_closed.jpeg';
   const guardOpenSrc = process.env.PUBLIC_URL + '/images/guard_open.jpeg';
 
@@ -30,9 +32,8 @@ const LoginForm = () => {
       const response = await axios.post(API_ENDPOINTS.signIn, { email, password });
       setErrors([]);
       localStorage.setItem('accessToken', response.data.access_token);
-      
+      login()
       navigate('/');
-
     } catch (error) {
       if (error.response) {
         setErrors(error.response.data.message || ['Resource is temporarily unavailable. Try again later']);

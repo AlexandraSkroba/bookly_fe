@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Component } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import API_ENDPOINTS from "../apiConfig";
 
 
