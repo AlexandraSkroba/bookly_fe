@@ -10,7 +10,8 @@ const API_ENDPOINTS = {
   editUser: `${API_URL}/users`,
   uploadAvatar: `${API_URL}/users/upload-avatar`,
   getAvatar: `${API_URL}/users/:id/avatar`,
-  getExhanges: `${API_URL}/exchanges`
+  getExhanges: `${API_URL}/exchanges`,
+  getBooks: `${API_URL}/books`
 }
 
 export default API_ENDPOINTS

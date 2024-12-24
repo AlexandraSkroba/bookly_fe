@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import API_ENDPOINTS from "../apiConfig";
 import { UserAvatar } from "../components/Profile/UserAvatar";
@@ -10,8 +10,8 @@ export const Profile = (props) => {
   const navigate = useNavigate();
   const [user, setUser ] = useState(null);
   const [loading, setLoading] = useState(true);
-  const userId = props?.userId;
-  const isOwner = props.isOwner;
+  const userId = useParams().id;
+  const isOwner = props?.isOwner;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -20,7 +20,7 @@ export const Profile = (props) => {
         if (userId) {
           url += `/${userId}`
         }
-        const response = await axios.get(url , {
+        const response = await axios.get(url, {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
         });
         setUser(response.data);
@@ -41,7 +41,7 @@ export const Profile = (props) => {
 
   return (
     <>
-      <UserAvatar userId={user?.id} />
+      <UserAvatar userId={user?.id} isOwner={isOwner} />
       <UserNavbar user={user} isOwner={isOwner} />
     </>
   );

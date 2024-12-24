@@ -3,6 +3,8 @@ import DataTable from 'datatables.net-react';
 import DT from 'datatables.net-dt';
 import 'datatables.net-select-dt';
 import 'datatables.net-responsive-dt';
+import axios from "axios";
+import API_ENDPOINTS from "../../apiConfig";
 DataTable.use(DT);
 
 
@@ -11,6 +13,10 @@ export class BooksList extends Component {
     super(props);
     this.books = props.books;
     this.isOwner = props.isOwner;
+
+    this.state = {
+      books: []
+    }
 
     this.columns = [
       { name: 'Title', data: 'title', sortable: true, searching: true },
@@ -22,24 +28,44 @@ export class BooksList extends Component {
       { name: 'action', data: 'id'}
     ];
   }
+  
+  async componentDidMount() {
+    if (!this.isOwner) {
+      try {
+        const response = await axios.get(API_ENDPOINTS.getBooks, {headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`}})
+        this.setState({books: response.data.books});
+      } catch(e) {
+        console.log(e)
+      }
+    }
+  }
 
   render() {
+    const { books } = this.state;
+    const isOwner = this.isOwner;
+    
     return (
       <>
         <DataTable className="table-responsive"
-          data={ this.books }
+          data={ this.isOwner ? this.books : books }
           columns={ this.columns }
           options={{ responsive: true, sortable: true, searching: true }}
           slots={{
-            action: (data, row) => (
-              
+            action: (data, _row) => { return (
               <>
                 <div className="d-flex flex-row justify-content-between">
-                <a href={`/book/${data}/edit`} className="btn btn-primary">Edit</a>
-                <input type="button" className="btn btn-danger ml-2" value="Delete" />
+                { isOwner ? (
+                          <>
+                            <a href={`/books/${data}/edit`} className="btn btn-primary">Edit</a>
+                            <input type="button" className="btn btn-danger ml-2" value="Delete" />)
+                          </>) : (
+                            <>
+                              <a href={`/books/${data}/edit`} className="btn btn-secondary">View</a>
+                            </>
+                          )}
                 </div>
               </>
-            )
+            )}
           }}
           pagination >
           <thead>
