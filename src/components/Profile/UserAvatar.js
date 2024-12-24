@@ -3,7 +3,7 @@ import axios from "axios";
 import API_ENDPOINTS from "../../apiConfig";
 import { Avatar } from "@files-ui/react";
 
-export const UserAvatar = ({ avatarName, userId }) => {
+export const UserAvatar = ({ avatarName, userId, isOwner }) => {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [uploadError, setUploadError] = useState(false);
