@@ -1,0 +1,26 @@
+.user-navbar__tabs {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+
+  ul li {
+    display: inline;
+    margin-right: 3em;
+    font-weight: bold;
+  }
+
+  .tab:hover {
+    color: #076d95;
+    cursor: pointer;
+  }
+
+  .tab.active {
+    color: #074d68;
+    text-decoration: underline;
+  }
+
+  .tab.active:hover {
+    color: #076d95;
+  }
+}
+

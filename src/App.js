@@ -10,6 +10,10 @@ import { Footer } from './components/Footer/Footer';
 import { RecoverPassword } from './pages/RecoverPassowrd';
 import { ResetPassword } from './pages/ResetPassword';
 import { useAuth } from './AuthContext';
+import { Profile } from './pages/Profile';
+import { NotFound } from './pages/NotFound';
+import { Unauthorized } from './pages/Unauthorized';
+import RequireAuth from './components/RequireAuth/RequireAuth';
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -25,6 +29,12 @@ function App() {
           <Route path="auth/confirm" element={<ConfirmEmailWrapper />} />
           <Route path="auth/password-recovery" element={<RecoverPassword />} />
           <Route path="password-reset" element={<ResetPassword />} />
+          <Route element={<RequireAuth isAuthenticated={isAuthenticated} />}>
+            <Route path="profile" element={<Profile isOwner={true} />} />
+          </Route>
+
+          <Route path="unauthorized" element={<Unauthorized />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
       <Footer />
