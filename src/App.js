@@ -14,6 +14,7 @@ import { Profile } from './pages/Profile';
 import { NotFound } from './pages/NotFound';
 import { Unauthorized } from './pages/Unauthorized';
 import RequireAuth from './components/RequireAuth/RequireAuth';
+import { BooksList } from './components/Books/BooksList';
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -31,6 +32,7 @@ function App() {
           <Route path="password-reset" element={<ResetPassword />} />
           <Route element={<RequireAuth isAuthenticated={isAuthenticated} />}>
             <Route path="profile" element={<Profile isOwner={true} />} />
+            <Route path="books" element={<BooksList isOwner={false} />} />
           </Route>
 
           <Route path="unauthorized" element={<Unauthorized />} />
