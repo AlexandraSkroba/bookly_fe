@@ -1,4 +1,4 @@
-const API_URL = process.env.API_URL || 'http://localhost:3001';
+export const API_URL = process.env.API_URL || 'http://localhost:3001';
 
 const API_ENDPOINTS = {
   signUp: `${API_URL}/auth/signup`,
@@ -11,7 +11,9 @@ const API_ENDPOINTS = {
   uploadAvatar: `${API_URL}/users/upload-avatar`,
   getAvatar: `${API_URL}/users/:id/avatar`,
   getExhanges: `${API_URL}/exchanges`,
-  getBooks: `${API_URL}/books`
+  getBooks: `${API_URL}/books`,
+  notificationsTest: `${API_URL}/notifications/test`,
+  currentUser: `${API_URL}/users/current`
 }
 
 export default API_ENDPOINTS

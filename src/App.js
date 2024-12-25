@@ -16,6 +16,7 @@ import { Unauthorized } from './pages/Unauthorized';
 import RequireAuth from './components/RequireAuth/RequireAuth';
 import { BooksList } from './components/Books/BooksList';
 import { BookWrapper } from './components/Books/Book';
+import { NotificationsTest } from './pages/NotificationsTest';
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -36,6 +37,7 @@ function App() {
             <Route path="books" element={<BooksList />} />
             <Route path="books/:id/edit" element={<BookWrapper />} />
             <Route path="users/:id" element={<Profile />} />
+            <Route path="notifications/test" element={<NotificationsTest />} />
           </Route>
 
           <Route path="unauthorized" element={<Unauthorized />} />
