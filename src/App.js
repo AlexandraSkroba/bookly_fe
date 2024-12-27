@@ -15,8 +15,9 @@ import { NotFound } from './pages/NotFound';
 import { Unauthorized } from './pages/Unauthorized';
 import RequireAuth from './components/RequireAuth/RequireAuth';
 import { BooksList } from './components/Books/BooksList';
-import { BookWrapper } from './components/Books/Book';
+import { Book, BookWrapper } from './components/Books/Book';
 import { NotificationsTest } from './pages/NotificationsTest';
+import { Notifications } from './components/Notifications/Notifications';
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -25,6 +26,7 @@ function App() {
     <>
       <BrowserRouter>
         <Header isAuthenticated={isAuthenticated} />
+        {isAuthenticated && <Notifications />}
         <Routes>
           <Route index element={<Home />} />
           <Route path="sign-up" element={<SignUp />} />
@@ -34,10 +36,11 @@ function App() {
           <Route path="password-reset" element={<ResetPassword />} />
           <Route element={<RequireAuth isAuthenticated={isAuthenticated} />}>
             <Route path="profile" element={<Profile isOwner={true} />} />
+            <Route path="users/:id" element={<Profile />} />
             <Route path="books" element={<BooksList />} />
             <Route path="books/:id/edit" element={<BookWrapper />} />
-            <Route path="users/:id" element={<Profile />} />
             <Route path="notifications/test" element={<NotificationsTest />} />
+            <Route path="books/new" element={<Book isNew={true} />} />
           </Route>
 
           <Route path="unauthorized" element={<Unauthorized />} />

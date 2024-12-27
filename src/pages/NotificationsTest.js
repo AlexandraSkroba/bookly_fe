@@ -11,7 +11,6 @@ export const NotificationsTest = () => {
   
   useEffect(() => {
     if (userId) {
-      socket.emit('register', parseInt(userId));
     }
 
     socket.on('notification', (message) => {
