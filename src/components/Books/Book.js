@@ -19,6 +19,8 @@ export const BookWrapper = () => {
 export class Book extends Component {
   constructor(props) {
     super(props);
+    this.isNew = props.isNew;
+
     this.state = {
       book: null,
       isOwner: false,
@@ -38,7 +40,9 @@ export class Book extends Component {
 
   async componentDidMount() {
     const id = this.props.id;
-    await this.fetchBook(id);
+    if (!this.isNew) {
+      await this.fetchBook(id);
+    }
   }
 
   fetchBook = async (id) => {
@@ -72,9 +76,9 @@ export class Book extends Component {
     });
   };
 
-  handleSubmitEvent = (e) => {
+  handleSubmitEvent = async (e) => {
     e.preventDefault();
-    const { title, author, genre, language, condition, country, city, exchangeState, owner, isOwner } = this.state;
+    const { book, title, author, genre, language, condition, country, city } = this.state;
 
     const errors = [];
     if (!title) errors.push("Title is required.");
@@ -83,94 +87,191 @@ export class Book extends Component {
     if (errors.length > 0) {
       this.setState({ errors });
     }
+  
+    const data = {
+      title, author, genre, language, condition, country, city
+    }
+
+    try {
+      await axios.put(`${API_ENDPOINTS.getBooks}/${book.id}`, data, { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('accessToken') } })
+      window.location.reload()
+    } catch(e) {
+      this.setState({errors: e.response.data.message})
+    }
   };
+
+  handleCreate = async (e) => {
+    e.preventDefault();
+    const { book, title, author, genre, language, condition, country, city } = this.state;
+
+    const data = {
+      title, author, genre, language, condition, country, city
+    }
+
+    try {
+      const response = await axios.post(`${API_ENDPOINTS.getBooks}`, data, { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('accessToken') } })
+      
+    } catch(e) {
+      this.setState({ errors: e.response.data.message })
+    }
+  }
+
+  requestExchange = async (e) => {
+    try {
+      const { book } = this.state;
+      const data = { bookId: book.id }
+      await axios.post(`${API_ENDPOINTS.getExchanges}`, data, {headers: { 'Authorization': 'Bearer ' + localStorage.getItem('accessToken') } })
+    } catch(e) {
+      this.setState({ errors: e.response.data.message })
+    }
+  }
+
+  deleteBook = async (e) => {
+    const { book } = this.state;
+    try {
+      const response = await axios.delete(`${API_ENDPOINTS.getBooks}/${book.id}`, { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('accessToken') } })
+    } catch(e) {
+      this.setState({ errors: e.response.data.message })
+    }
+  }
+
+  resetForm = (e) => {
+    window.location.reload()
+  }
+
+  quitForm() {
+    window.history.back()
+  }
 
   render() {
     const { title, author, genre, language, condition, country, city, exchangeState, owner, errors, isOwner, notFound } = this.state;
+    const disabled = !isOwner && !this.isNew;
 
     if (notFound) {
       return <Navigate to="/not-found" />;
     }
 
     return (
-      <form onSubmit={this.handleSubmitEvent}>
-        <FormErrors errors={errors} />
-        <div className="row">
-          <InputField
-            id="title"
-            name="title"
-            value={title}
-            label="Title"
-            onChange={this.handleChange}
-            disabled={!isOwner}
-          />
-          <InputField
-            id="author"
-            name="author"
-            value={author}
-            label="Author"
-            onChange={this.handleChange}
-            disabled={!isOwner}
-          />
-          <InputField
-            id="genre"
-            name="genre"
-            value={genre}
-            label="Genre"
-            onChange={this.handleChange}
-            disabled={!isOwner}
-          />
-          <InputField
-            id="language"
-            name="language"
-            value={language}
-            label="Language"
-            onChange={this.handleChange}
-            disabled={!isOwner}
-          />
-        </div>
-        <div className="row">
-          <div className="col-sm-3">
-            <div className="form-group">
-              <label htmlFor="condition" className="col-form-label">Condition</label>
-              <select id="condition" name="condition" value={condition} onChange={this.handleChange} className="form-control">
-                <option value="new">New</option>
-                <option value="used">Used</option>
-                <option value="damaged">Damaged</option>
-              </select>
+      <>
+        <form onSubmit={this.isNew ? this.handleCreate : this.handleSubmitEvent}>
+          <div className="row mb-5">
+            <div className="col-sm-3">
+              { !this.isNew && (<><span>Owner link:</span> <Link to={`/users/${ owner.id }`} className="btn">{owner.username}</Link></>)}
             </div>
           </div>
-          <InputField
-            id="country"
-            name="country"
-            value={country}
-            label="Country"
-            onChange={this.handleChange}
-            disabled={!isOwner}
-          />
-          <InputField
-            id="city"
-            name="city"
-            value={city}
-            label="City"
-            onChange={this.handleChange}
-            disabled={!isOwner}
-          />
-          <InputField
-            id="exchangeState"
-            name="exchangeState"
-            value={exchangeState}
-            label="exchange State"
-            onChange={this.handleChange}
-            disabled={true}
-          />
-        </div>
-        <div class="row mt-5">
-          <div className="col-sm-3">
-            <Link to={`/users/${ owner.id }`} className="btn btn-warning">OWNER LINK({owner.username})</Link>
+          <FormErrors errors={errors} />
+          <div className="row">
+            <InputField
+              id="title"
+              name="title"
+              value={title}
+              label="Title"
+              onChange={this.handleChange}
+              disabled={disabled}
+            />
+            <InputField
+              id="author"
+              name="author"
+              value={author}
+              label="Author"
+              onChange={this.handleChange}
+              disabled={disabled}
+            />
+            <InputField
+              id="genre"
+              name="genre"
+              value={genre}
+              label="Genre"
+              onChange={this.handleChange}
+              disabled={disabled}
+            />
+            <InputField
+              id="language"
+              name="language"
+              value={language}
+              label="Language"
+              onChange={this.handleChange}
+              disabled={disabled}
+            />
           </div>
-        </div>
-      </form>
+          <div className="row">
+            <div className="col-sm-3">
+              <div className="form-group">
+                <label htmlFor="condition" className="col-form-label">Condition</label>
+                <select id="condition" name="condition" value={condition} onChange={this.handleChange} disabled={disabled} className="form-control">
+                  <option value="new">New</option>
+                  <option value="used">Used</option>
+                  <option value="damaged">Damaged</option>
+                </select>
+              </div>
+            </div>
+            <InputField
+              id="country"
+              name="country"
+              value={country}
+              label="Country"
+              onChange={this.handleChange}
+              disabled={disabled}
+            />
+            <InputField
+              id="city"
+              name="city"
+              value={city}
+              label="City"
+              onChange={this.handleChange}
+              disabled={disabled}
+            />
+            { !this.isNew &&
+              (
+              <InputField
+                id="exchangeState"
+                name="exchangeState"
+                value={exchangeState}
+                label="exchange State"
+                onChange={this.handleChange}
+                disabled={true}
+              />
+              )
+            }
+          </div>
+          <div className="row mt-1">
+            { !this.isNew ? (
+              <>
+                { ((exchangeState === 'available' || exchangeState === 'requested') && !isOwner) && (
+                  <>
+                    <div className="col-sm-1">
+                      <button className="btn btn-warning" onClick={this.requestExchange}>Request exchange</button>
+                    </div>
+                  </>
+                ) }
+                { isOwner && (
+                  <>
+                    <div className="col-sm-1">
+                      <input type="submit" className="btn btn-success" value="Save" />
+                    </div>
+                    <div className="col-sm-1">
+                      <div className="btn btn-secondary" onClick={this.resetForm}>Reset</div>
+                    </div>
+                    <div className="col-sm-10 d-flex flex-row-reverse">
+                      <button className="btn btn-danger" onClick={this.deleteBook}>Delete</button>
+                    </div>
+                  </>
+                  )
+                }
+              </>) : (
+                <>
+                  <div className="col-sm-1">
+                    <input type="submit" className="btn btn-success" value="Create" />
+                  </div>
+                  <div className="col-sm-1">
+                    <div className="btn btn-secondary" onClick={this.quitForm}>Cancel</div>
+                  </div>
+                </>
+              )
+            }
+          </div>
+        </form>
+      </>
     );
   }
 }

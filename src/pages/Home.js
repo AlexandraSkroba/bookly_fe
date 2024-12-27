@@ -7,7 +7,7 @@ export class Home extends Component {
     return (
       <>
         <div className="row d-flex flex-column align-items-center w-100 mt-5 home__wrapper">
-          <div className="col-sm-4 h1 mt-5">
+          <div className="col-sm-5 h1 mt-5">
             <p>Welcome to Bookly!</p>
           </div>
           <div className="col-sm-12 mt-5 h3">Do you want to know whom of your friends have read this?</div>

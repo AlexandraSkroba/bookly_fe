@@ -32,6 +32,7 @@ const LoginForm = (props) => {
       const response = await axios.post(API_ENDPOINTS.signIn, { email, password });
       setErrors([]);
       localStorage.setItem('accessToken', response.data.access_token);
+      localStorage.setItem('currentUser', JSON.stringify(response.data.user));
       login()
       navigate('/');
     } catch (error) {

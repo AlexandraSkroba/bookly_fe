@@ -22,12 +22,11 @@ export class ExchangesList extends Component {
       { name: 'to', data: 'to'},
       { name: 'action', data: 'id' }
     ]
-    
   }
 
   async componentDidMount() {
     try {
-      const response = await axios.get(API_ENDPOINTS.getExhanges, {headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } })
+      const response = await axios.get(API_ENDPOINTS.getExchanges, {headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } })
       this.setState({exchanges: response.data })
     } catch(e) {
       console.log(e.response)
