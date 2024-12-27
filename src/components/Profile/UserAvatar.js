@@ -53,9 +53,16 @@ export const UserAvatar = ({ avatarName, userId, isOwner }) => {
   return (
     <>
       <div className="row justify-content-center">
-        <Avatar src={avatarUrl} changeLabel="Upload new photo" accept=".png,.jpg,.jpeg" onChange={uploadFile} style={{width: '320px', height: '320px'}} />
-        {/* <img src={avatarUrl} height={"320"} style={{width: '320px'}} /> */}
-        { uploadError && (<div className="row text-center"><p>Error uploading. Try again</p></div>) }
+        { isOwner ? (
+          <>
+            <Avatar src={avatarUrl} changeLabel="Upload new photo" accept=".png,.jpg,.jpeg" onChange={uploadFile} style={{width: '320px', height: '320px'}} />
+            { uploadError && (<div className="row text-center"><p>Error uploading. Try again</p></div>) }
+          </>
+        ) : (
+          <>
+            <Avatar src={avatarUrl} style={{width: '320px', height: '320px'}} changeLabel={null} readOnly={true} />
+          </>
+        )}
       </div>
     </>
   );

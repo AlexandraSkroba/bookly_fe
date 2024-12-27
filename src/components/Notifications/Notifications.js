@@ -25,6 +25,7 @@ export const Notifications = () => {
     try {
       const response = await axios.get(API_ENDPOINTS.getNotifications, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`} })
       setNotifications(response.data);
+      console.log(response.data)
       notificationsFetched = true;
     } catch(e) {
       console.log(e)

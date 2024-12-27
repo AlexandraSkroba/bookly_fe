@@ -1,4 +1,4 @@
-export const API_URL = process.env.API_URL || 'http://localhost:3001';
+export const API_URL = process.env.API_URL || 'https://28ef-37-214-7-145.ngrok-free.app';
 
 const API_ENDPOINTS = {
   signUp: `${API_URL}/auth/signup`,

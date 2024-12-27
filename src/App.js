@@ -36,7 +36,7 @@ function App() {
           <Route path="password-reset" element={<ResetPassword />} />
           <Route element={<RequireAuth isAuthenticated={isAuthenticated} />}>
             <Route path="profile" element={<Profile isOwner={true} />} />
-            <Route path="users/:id" element={<Profile />} />
+            <Route path="users/:id" element={<Profile isOwner={false} />} />
             <Route path="books" element={<BooksList />} />
             <Route path="books/:id/edit" element={<BookWrapper />} />
             <Route path="notifications/test" element={<NotificationsTest />} />

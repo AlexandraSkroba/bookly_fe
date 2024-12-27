@@ -44,7 +44,7 @@ export class UserNavbar extends Component {
             <ul>
               <li className={`tab ${activeComponentNum === 0 ? 'active' : ''}`} onClick={() => this.toggleActiveTab(0)}>Personal info</li>
               <li className={`tab ${activeComponentNum === 1 ? 'active' : ''}`} onClick={() => this.toggleActiveTab(1)}>Books</li>
-              {(this.isOwner && <li className={`tab ${activeComponentNum === 2 ? 'active' : ''}`} onClick={() => this.toggleActiveTab(2)}>Exchanges</li>)}
+              <li className={`tab ${activeComponentNum === 2 ? 'active' : ''}`} onClick={() => this.toggleActiveTab(2)}>Exchanges</li>
             </ul>
           </nav>
         </div>

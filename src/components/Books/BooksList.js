@@ -12,19 +12,13 @@ DataTable.use(DT);
 
 export class BooksList extends Component {
   constructor(props) {
-    console.log('this')
     super(props);
     this.books = props.books;
     this.isOwner = props.isOwner;
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  
     this.state = {
       books: [],
       errors: []
-    }
-
-    this.state = {
-      books: []
     }
 
     this.columns = [
@@ -34,12 +28,12 @@ export class BooksList extends Component {
       { name: 'Language', data: 'language', sortable: true },
       { name: 'Condition', data: 'condition', sortable: true },
       { name: 'Status', data: 'exchangeState', sortable: true },
-      { name: 'action', data: (this.isOwner ? null : 'owner') }
+      { name: 'action', data: (this.isOwner || this.books ? null : 'owner') }
     ];
   }
   
   async componentDidMount() {
-    if (!this.isOwner) {
+    if (!this.isOwner && !this.books) {
       try {
         const response = await axios.get(API_ENDPOINTS.getBooks, {headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`}})
         this.setState({books: response.data.books});
@@ -75,7 +69,7 @@ export class BooksList extends Component {
         </div>
         <FormErrors errors={errors}/>
         <DataTable className="table-responsive"
-          data={ this.isOwner ? this.books : books }
+          data={ this.books || this.isOwner ? this.books : books }
           columns={ this.columns }
           options={{ responsive: true, sortable: true, searching: true }}
           slots={{
