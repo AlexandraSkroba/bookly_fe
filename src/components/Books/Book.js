@@ -20,6 +20,7 @@ export class Book extends Component {
   constructor(props) {
     super(props);
     this.isNew = props.isNew;
+
     this.state = {
       book: null,
       isOwner: false,
@@ -86,7 +87,7 @@ export class Book extends Component {
     if (errors.length > 0) {
       this.setState({ errors });
     }
-
+  
     const data = {
       title, author, genre, language, condition, country, city
     }
@@ -270,7 +271,6 @@ export class Book extends Component {
             }
           </div>
         </form>
-
       </>
     );
   }

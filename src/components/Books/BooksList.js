@@ -22,6 +22,10 @@ export class BooksList extends Component {
       errors: []
     }
 
+    this.state = {
+      books: []
+    }
+
     this.columns = [
       { name: 'Title', data: 'title', sortable: true, searching: true },
       { name: 'Author', data: 'author', sortable: true },
@@ -60,7 +64,7 @@ export class BooksList extends Component {
   render() {
     const { books, errors } = this.state;
     const currentUser = this.currentUser;
-    
+
     return (
       <>
         <div className="row d-flex">
@@ -84,6 +88,7 @@ export class BooksList extends Component {
                           </>) : (
                             <>
                               <a href={`/books/${row.id}/edit`} className="btn btn-secondary">View</a>
+
                             </>
                           )}
                 </div>
