@@ -102,7 +102,7 @@ export class Book extends Component {
 
   handleCreate = async (e) => {
     e.preventDefault();
-    const { book, title, author, genre, language, condition, country, city } = this.state;
+    const { title, author, genre, language, condition, country, city } = this.state;
 
     const data = {
       title, author, genre, language, condition, country, city

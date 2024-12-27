@@ -12,6 +12,7 @@ DataTable.use(DT);
 
 export class BooksList extends Component {
   constructor(props) {
+    console.log('this')
     super(props);
     this.books = props.books;
     this.isOwner = props.isOwner;

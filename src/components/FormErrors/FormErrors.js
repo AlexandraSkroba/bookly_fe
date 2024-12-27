@@ -9,7 +9,7 @@ export class FormErrors extends Component {
     return (
       <div className="row form-errors">
         <div className="col-sm-12">
-          {errors.length > 0 && (
+          {errors?.length > 0 && (
             <ul style={{ color: 'red' }}>
               {errors.map((error, index) => (
                 <li key={index}>{error}</li>
