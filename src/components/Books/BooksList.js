@@ -4,7 +4,7 @@ import DT from 'datatables.net-dt';
 import 'datatables.net-select-dt';
 import 'datatables.net-responsive-dt';
 import axios from "axios";
-import API_ENDPOINTS from "../../apiConfig";
+import API_ENDPOINTS, { defaultHeaders } from "../../apiConfig";
 import { Link } from "react-router-dom";
 import { FormErrors } from "../FormErrors/FormErrors";
 DataTable.use(DT);
@@ -35,7 +35,7 @@ export class BooksList extends Component {
   async componentDidMount() {
     if (!this.isOwner && !this.books) {
       try {
-        const response = await axios.get(API_ENDPOINTS.getBooks, {headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`}})
+        const response = await axios.get(API_ENDPOINTS.getBooks, { headers: defaultHeaders })
         this.setState({books: response.data.books});
       } catch(e) {
         console.log(e)
@@ -46,9 +46,9 @@ export class BooksList extends Component {
 
   deleteBook = async (e) => {
     const id = e.target.dataset.id;
-    if (window.confirm('Are you sure')) {
+    if (window.confirm('Are you sure?')) {
       try {
-        const response = await axios.delete(`${API_ENDPOINTS.getBooks}/${id}`, { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('accessToken') } })
+        const response = await axios.delete(`${API_ENDPOINTS.getBooks}/${id}`, { headers: defaultHeaders })
         window.location.reload()
       } catch(e) {
         this.setState({ errors: e.response.data.message })

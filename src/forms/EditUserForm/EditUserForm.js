@@ -7,7 +7,7 @@ export class EditUserForm extends Component {
   constructor(props) {
     super(props);
     this.user = props.user;
-    this.ownPage = props.ownPage;
+    this.ownPage = JSON.parse(localStorage.getItem('currentUser')).id == this.user.id
     this.state = {
       email: this.user?.email,
       username: this.user?.username,
@@ -58,7 +58,7 @@ export class EditUserForm extends Component {
             <div className="col-sm-12">
               <div className="form-group">
                 <label htmlFor="username" className="col-form-label">Username</label>
-                <input type="text" id="username" name="username" value={username} aria-describedby="username" onChange={this.handleChange} className="form-group" />
+                <input type="text" id="username" name="username" value={username} aria-describedby="username" onChange={this.handleChange} disabled={!this.ownPage} className="form-group" />
               </div>
             </div>
           </div>
@@ -66,24 +66,29 @@ export class EditUserForm extends Component {
             <div className="col-sm-12">
               <div className="form-group">
                 <label htmlFor="email" className="col-form-label">Email</label>
-                <input type="email" id="email" name="email" value={email} placeholder="sample@mail.ru" aria-describedby="email" onChange={this.handleChange} className="form-group" />
+                <input type="email" id="email" name="email" value={email} placeholder="sample@mail.ru" aria-describedby="email" onChange={this.handleChange} disabled={!this.ownPage} className="form-group" />
               </div>
             </div>
           </div>
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="row justify-content-center">
-              <div className="col-sm-1">
-                <div className="form-group">
-                  <input type="submit" value="Update" className="btn btn-success"/>
+          { this.ownPage && (
+              <>
+                <div className="row">
+                  <div className="col-sm-12">
+                    <div className="row justify-content-center">
+                    <div className="col-sm-1">
+                      <div className="form-group">
+                        <input type="submit" value="Update" className="btn btn-success"/>
+                      </div>
+                    </div>
+                    <div className="col-sm-1">
+                      <div className="btn btn-info" onClick={this.resetForm}>Reset</div>
+                    </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="col-sm-1">
-                <div className="btn btn-info" onClick={this.resetForm}>Reset</div>
-              </div>
-              </div>
-            </div>
-          </div>
+              </>
+            )
+          }
         </form>
       </>
     )

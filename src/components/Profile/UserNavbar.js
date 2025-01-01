@@ -9,7 +9,6 @@ export class UserNavbar extends Component {
     super(props);
     this.user = props.user;
     this.isAuthenticated = props.isAuthenticated
-    this.ownPage = Boolean(props.ownPage);
     this.state = {
       activeComponentNum: 0
     };

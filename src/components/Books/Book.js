@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
-import API_ENDPOINTS from "../../apiConfig";
+import API_ENDPOINTS, { defaultHeaders } from "../../apiConfig";
 import axios from "axios";
 import { FormErrors } from "../../components/FormErrors/FormErrors";
 import { InputField } from "../../components/InputField";
@@ -28,7 +28,7 @@ export class Book extends Component {
       author: '',
       genre: '',
       language: '',
-      condition: '',
+      condition: 'new',
       country: '',
       city: '',
       exchangeState: '',
@@ -48,7 +48,7 @@ export class Book extends Component {
   fetchBook = async (id) => {
     try {
       const response = await axios.get(`${API_ENDPOINTS.getBooks}/${id}`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
+        headers: defaultHeaders
       });
       const book = response.data.book;
       this.setState({
@@ -93,7 +93,7 @@ export class Book extends Component {
     }
 
     try {
-      await axios.put(`${API_ENDPOINTS.getBooks}/${book.id}`, data, { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('accessToken') } })
+      await axios.put(`${API_ENDPOINTS.getBooks}/${book.id}`, data, { headers: defaultHeaders })
       window.location.reload()
     } catch(e) {
       this.setState({errors: e.response.data.message})
@@ -109,7 +109,7 @@ export class Book extends Component {
     }
 
     try {
-      const response = await axios.post(`${API_ENDPOINTS.getBooks}`, data, { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('accessToken') } })
+      const response = await axios.post(`${API_ENDPOINTS.getBooks}`, data, { headers: defaultHeaders })
       
     } catch(e) {
       this.setState({ errors: e.response.data.message })
@@ -120,7 +120,7 @@ export class Book extends Component {
     try {
       const { book } = this.state;
       const data = { bookId: book.id }
-      await axios.post(`${API_ENDPOINTS.getExchanges}`, data, {headers: { 'Authorization': 'Bearer ' + localStorage.getItem('accessToken') } })
+      await axios.post(`${API_ENDPOINTS.getExchanges}`, data, {headers: defaultHeaders })
     } catch(e) {
       this.setState({ errors: e.response.data.message })
     }
@@ -129,7 +129,7 @@ export class Book extends Component {
   deleteBook = async (e) => {
     const { book } = this.state;
     try {
-      const response = await axios.delete(`${API_ENDPOINTS.getBooks}/${book.id}`, { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('accessToken') } })
+      const response = await axios.delete(`${API_ENDPOINTS.getBooks}/${book.id}`, { headers: defaultHeaders })
     } catch(e) {
       this.setState({ errors: e.response.data.message })
     }
@@ -146,13 +146,14 @@ export class Book extends Component {
   render() {
     const { title, author, genre, language, condition, country, city, exchangeState, owner, errors, isOwner, notFound } = this.state;
     const disabled = !isOwner && !this.isNew;
-
+    console.log(condition)
     if (notFound) {
       return <Navigate to="/not-found" />;
     }
 
     return (
       <>
+        { this.isNew && (<div className="row h4 m-2">Create new book</div>) }
         <form onSubmit={this.isNew ? this.handleCreate : this.handleSubmitEvent}>
           <div className="row mb-5">
             <div className="col-sm-3">

@@ -1,4 +1,4 @@
-export const API_URL = process.env.API_URL || 'https://28ef-37-214-7-145.ngrok-free.app';
+export const API_URL = process.env.API_URL || 'http://localhost:3001';
 
 const API_ENDPOINTS = {
   signUp: `${API_URL}/auth/signup`,
@@ -17,5 +17,8 @@ const API_ENDPOINTS = {
   dismissNotification: `${API_URL}/notifications/:id`,
   currentUser: `${API_URL}/users/current`,
 }
+
+export const defaultHeaders = { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
+
 
 export default API_ENDPOINTS
