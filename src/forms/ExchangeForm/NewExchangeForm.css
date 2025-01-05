@@ -1,0 +1,9 @@
+.exchange-form__wrapper {
+  display: grid;
+  grid-template-columns: 2fr 2fr;
+  grid-template-rows: 1.5fr 4fr;
+  background: url('../../../public/images/exchange.webp') no-repeat;
+  background-position-x: center;
+  min-height: 57vh;
+  min-width: 50vh;
+}

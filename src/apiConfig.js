@@ -12,10 +12,12 @@ const API_ENDPOINTS = {
   getAvatar: `${API_URL}/users/:id/avatar`,
   getExchanges: `${API_URL}/exchanges`,
   getBooks: `${API_URL}/books`,
+  makeAvailable: `${API_URL}/books/:id/make-available`,
   notificationsTest: `${API_URL}/notifications/test`,
   getNotifications: `${API_URL}/notifications/current`,
   dismissNotification: `${API_URL}/notifications/:id`,
   currentUser: `${API_URL}/users/current`,
+  exchanges: `${API_URL}/exchanges`,
 }
 
 export const defaultHeaders = { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }

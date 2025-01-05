@@ -1,7 +1,7 @@
 import axios from "axios";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
-import API_ENDPOINTS, { API_URL } from "../../apiConfig";
+import API_ENDPOINTS, { API_URL, defaultHeaders } from "../../apiConfig";
 import { Notification } from './Notification'
 
 
@@ -14,7 +14,7 @@ export const Notifications = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(API_ENDPOINTS.currentUser, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } })
+      const response = await axios.get(API_ENDPOINTS.currentUser, { headers: defaultHeaders })
       setUserId(response.data.id);
     } catch(e) {
       console.log(e)
@@ -23,9 +23,8 @@ export const Notifications = () => {
 
   const fetchNotifications = async () => {
     try {
-      const response = await axios.get(API_ENDPOINTS.getNotifications, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`} })
+      const response = await axios.get(API_ENDPOINTS.getNotifications, { headers: defaultHeaders })
       setNotifications(response.data);
-      console.log(response.data)
       notificationsFetched = true;
     } catch(e) {
       console.log(e)

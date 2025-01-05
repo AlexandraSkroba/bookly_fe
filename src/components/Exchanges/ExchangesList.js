@@ -1,5 +1,5 @@
 import { Component } from "react";
-import API_ENDPOINTS from "../../apiConfig";
+import API_ENDPOINTS, { defaultHeaders } from "../../apiConfig";
 import DataTable from 'datatables.net-react';
 import DT from 'datatables.net-dt';
 import 'datatables.net-select-dt';
@@ -19,14 +19,15 @@ export class ExchangesList extends Component {
     this.columns = [
       { name: 'book', data: 'book', sortable: true },
       { name: 'from', data: 'from' },
-      { name: 'to', data: 'to'},
+      { name: 'to', data: 'to' },
+      { name: 'state', data: 'state' },
       { name: 'action', data: 'id' }
     ]
   }
 
   async componentDidMount() {
     try {
-      const response = await axios.get(API_ENDPOINTS.getExchanges, {headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } })
+      const response = await axios.get(API_ENDPOINTS.getExchanges, {headers: defaultHeaders })
       this.setState({exchanges: response.data })
     } catch(e) {
       console.log(e.response)
@@ -51,6 +52,9 @@ export class ExchangesList extends Component {
             to: (data, _row) => (
               <a href={`users/${data.id}/edit`}>{data.username}</a>
             ),
+            state: (_data, row) => (
+              <p>{row.state}</p>
+            ),
             action: (data, _row) => (
               <a href={`/exchanges/${data}/edit`} className="btn btn-primary">Edit</a>
             )
@@ -61,6 +65,7 @@ export class ExchangesList extends Component {
               <th className="text-center">Book</th>
               <th className="text-center">From</th>
               <th className="text-center">To</th>
+              <th className="text-center">State</th>
               <th className="text-center">Action</th>
             </tr>
           </thead>

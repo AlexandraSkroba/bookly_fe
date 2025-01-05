@@ -110,17 +110,7 @@ export class Book extends Component {
 
     try {
       const response = await axios.post(`${API_ENDPOINTS.getBooks}`, data, { headers: defaultHeaders })
-      
-    } catch(e) {
-      this.setState({ errors: e.response.data.message })
-    }
-  }
-
-  requestExchange = async (e) => {
-    try {
-      const { book } = this.state;
-      const data = { bookId: book.id }
-      await axios.post(`${API_ENDPOINTS.getExchanges}`, data, {headers: defaultHeaders })
+      window.location.href = '/books'
     } catch(e) {
       this.setState({ errors: e.response.data.message })
     }
@@ -135,6 +125,16 @@ export class Book extends Component {
     }
   }
 
+  makeAvailable = async (e) => {
+    const { book } = this.state;
+    try {
+      const response = await axios.get(API_ENDPOINTS.makeAvailable.replace(':id', book.id), { headers: defaultHeaders })
+      this.resetForm()
+    } catch(e) {
+      this.setState({ errors: e.response.data.message })
+    }
+  }
+
   resetForm = (e) => {
     window.location.reload()
   }
@@ -144,9 +144,9 @@ export class Book extends Component {
   }
 
   render() {
-    const { title, author, genre, language, condition, country, city, exchangeState, owner, errors, isOwner, notFound } = this.state;
+    const {book, title, author, genre, language, condition, country, city, exchangeState, owner, errors, isOwner, notFound } = this.state;
     const disabled = !isOwner && !this.isNew;
-    console.log(condition)
+
     if (notFound) {
       return <Navigate to="/not-found" />;
     }
@@ -238,10 +238,10 @@ export class Book extends Component {
           <div className="row mt-1">
             { !this.isNew ? (
               <>
-                { ((exchangeState === 'available' || exchangeState === 'requested') && !isOwner) && (
+                { ((exchangeState === 'available') && !isOwner) && (
                   <>
                     <div className="col-sm-1">
-                      <button className="btn btn-warning" onClick={this.requestExchange}>Request exchange</button>
+                      <Link to={`/exchanges/new?bookId=${book.id}`} params={{isNew: true}} className="btn btn-warning">Request exchange</Link>
                     </div>
                   </>
                 ) }
@@ -254,7 +254,17 @@ export class Book extends Component {
                       <div className="btn btn-secondary" onClick={this.resetForm}>Reset</div>
                     </div>
                     <div className="col-sm-10 d-flex flex-row-reverse">
-                      <button className="btn btn-danger" onClick={this.deleteBook}>Delete</button>
+                      { exchangeState === 'exchanged' && (
+                        <>
+                          <div className="btn btn-secondary" onClick={this.makeAvailable}>Make available</div>
+                        </>
+                      ) }
+                      { (exchangeState === 'exchanged' || exchangeState === 'available') && (
+                        <>
+                          <button className="btn btn-danger" onClick={this.deleteBook}>Delete</button>
+                        </>
+                        )
+                      }
                     </div>
                   </>
                   )
