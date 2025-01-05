@@ -38,7 +38,6 @@ export class BooksList extends Component {
         const response = await axios.get(API_ENDPOINTS.getBooks, { headers: defaultHeaders })
         this.setState({books: response.data.books});
       } catch(e) {
-        console.log(e)
         this.setState({errors: e.response.data.message});
       }
     }
@@ -73,13 +72,18 @@ export class BooksList extends Component {
           columns={ this.columns }
           options={{ responsive: true, sortable: true, searching: true }}
           slots={{
-            action: (data, row) => {return (
+            action: (data, row) => { return (
               <>
                 <div className="d-flex flex-row justify-content-between">
                 { (this.isOwner || currentUser.id === data.id) ? (
                           <>
                             <a href={`/books/${row.id}/edit`} className="btn btn-primary">Edit</a>
-                            <input type="button" className="btn btn-danger ml-2" value="Delete" data-id={row.id} onClick={this.deleteBook}/>
+                            { (row.exchangeState === 'available' || row.exchangeState === 'exchanged') && (
+                              <> 
+                                <input type="button" className="btn btn-danger ml-2" value="Delete" data-id={row.id} onClick={this.deleteBook}/>
+                              </>
+                              )
+                            }
                           </>) : (
                             <>
                               <a href={`/books/${row.id}/edit`} className="btn btn-secondary">View</a>

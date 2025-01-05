@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import API_ENDPOINTS from "../apiConfig";
+import API_ENDPOINTS, { defaultHeaders } from "../apiConfig";
 import { UserAvatar } from "../components/Profile/UserAvatar";
 import { UserNavbar } from "../components/Profile/UserNavbar";
 
@@ -21,7 +21,7 @@ export const Profile = (props) => {
           url += `/${userId}`
         }
         const response = await axios.get(url, {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
+          headers: defaultHeaders
         });
         setUser(response.data);
       } catch (e) {

@@ -18,6 +18,8 @@ import { BooksList } from './components/Books/BooksList';
 import { Book, BookWrapper } from './components/Books/Book';
 import { NotificationsTest } from './pages/NotificationsTest';
 import { Notifications } from './components/Notifications/Notifications';
+import { Exchange } from './components/Exchange/Exchange';
+import { faSleigh } from '@fortawesome/free-solid-svg-icons/faSleigh';
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -41,6 +43,8 @@ function App() {
             <Route path="books/:id/edit" element={<BookWrapper />} />
             <Route path="notifications/test" element={<NotificationsTest />} />
             <Route path="books/new" element={<Book isNew={true} />} />
+            <Route path="exchanges/new" element={<Exchange isNew={true} />} />
+            <Route path="exchanges/:id/edit" element={<Exchange isNew={false} />} />
           </Route>
 
           <Route path="unauthorized" element={<Unauthorized />} />

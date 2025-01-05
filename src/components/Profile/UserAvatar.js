@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import API_ENDPOINTS from "../../apiConfig";
+import API_ENDPOINTS, { defaultHeaders } from "../../apiConfig";
 import { Avatar } from "@files-ui/react";
 
 export const UserAvatar = ({ avatarName, userId, isOwner }) => {
@@ -11,7 +11,7 @@ export const UserAvatar = ({ avatarName, userId, isOwner }) => {
   const fetchAvatar = async () => {
     try {        
       const response = await axios.get(`${API_ENDPOINTS.getAvatar.replace(':id', userId)}`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` },
+        headers: defaultHeaders,
         params: { path: avatarName },
         responseType: 'blob'
       });

@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { FormErrors } from "../../components/FormErrors/FormErrors";
-import API_ENDPOINTS from "../../apiConfig";
+import API_ENDPOINTS, { defaultHeaders } from "../../apiConfig";
 import axios from "axios";
 
 export class EditUserForm extends Component {
@@ -33,7 +33,7 @@ export class EditUserForm extends Component {
     try {
       this.setState({success: false, errors: []})
       const { username } = this.state;
-      const response = await axios.put(API_ENDPOINTS.editUser, { username }, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }, })
+      const response = await axios.put(API_ENDPOINTS.editUser, { username }, { headers: defaultHeaders })
       this.setState({success: true, errors: []})
     } catch(e) {
       if (e.response) {

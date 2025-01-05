@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import API_ENDPOINTS, { API_URL } from "../apiConfig";
+import API_ENDPOINTS, { API_URL, defaultHeaders } from "../apiConfig";
 import axios from "axios";
 
 const socket = io(API_URL);
@@ -24,7 +24,7 @@ export const NotificationsTest = () => {
 
   const sendTestNotification = async () => {
     try {
-      const response = await axios.get(API_ENDPOINTS.notificationsTest, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`} });
+      const response = await axios.get(API_ENDPOINTS.notificationsTest, { headers: defaultHeaders });
     } catch (error) {
       console.log('Error sending notification:', error);
     }

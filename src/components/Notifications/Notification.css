@@ -1,0 +1,15 @@
+.notification {
+  a.notification-book__link {
+    color: rgb(0, 143, 50) !important;
+  }
+
+  a {
+    color: rgb(255, 0, 0) !important;
+  }
+
+  a:hover {
+    color: rgb(11, 63, 176) !important;
+  }
+}
+
+
