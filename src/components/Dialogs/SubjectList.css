@@ -1,0 +1,5 @@
+.subjects-list {
+  list-style-type: none;
+  max-height: 10vh;
+  overflow-y: scroll;
+}

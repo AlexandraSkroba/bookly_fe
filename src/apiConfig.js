@@ -18,6 +18,8 @@ const API_ENDPOINTS = {
   dismissNotification: `${API_URL}/notifications/:id`,
   currentUser: `${API_URL}/users/current`,
   exchanges: `${API_URL}/exchanges`,
+  dialogs: `${API_URL}/dialogs`,
+  messages: `${API_URL}/messages`,
 }
 
 export const defaultHeaders = { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }

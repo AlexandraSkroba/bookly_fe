@@ -23,7 +23,7 @@ export const Notifications = () => {
 
   const fetchNotifications = async () => {
     try {
-      const response = await axios.get(API_ENDPOINTS.getNotifications, { headers: defaultHeaders })
+      const response = await axios.get(API_ENDPOINTS.getNotifications, { headers: defaultHeaders });
       setNotifications(response.data);
       notificationsFetched = true;
     } catch(e) {
@@ -50,13 +50,11 @@ export const Notifications = () => {
       socket.off('notification');
     }
   }, [userId])
-
-
   return (
     <div className="row">
       <ul className="col-sm-12 d-flex flex-column">
-        {notifications.map((notification, index) => (
-          <Notification id={notification.id} text={notification.text} dismissHandler={dismissNotification} />
+        {[...notifications].map((notification) => (
+          <Notification notificationId={notification.id} text={notification.text} dismissHandler={dismissNotification} />
         ))}
       </ul>
     </div>
