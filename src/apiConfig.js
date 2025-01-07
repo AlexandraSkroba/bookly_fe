@@ -20,6 +20,7 @@ const API_ENDPOINTS = {
   exchanges: `${API_URL}/exchanges`,
   dialogs: `${API_URL}/dialogs`,
   messages: `${API_URL}/messages`,
+  ratings: `${API_URL}/ratings`
 }
 
 export const defaultHeaders = { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }

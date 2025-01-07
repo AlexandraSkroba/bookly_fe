@@ -3,15 +3,30 @@ import { FormErrors } from "../../components/FormErrors/FormErrors"
 import { useEffect, useState } from "react";
 import API_ENDPOINTS, { defaultHeaders } from "../../apiConfig";
 import axios from "axios";
+import "./EditExchangeForm.css"
 
 
-export const EditExchangeForm = (props) => {
+export const EditExchangeForm = () => {
   const [errors, setErrors] = useState([]);
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const navigate = useNavigate();
   const exchangeId = useParams().id;
-  let exchangeRetrieved = false;
   const [exchange, setExchange] = useState(null);
+  const [ratings, setRatings] = useState([]);
+  const [rated, setRated] = useState(false);
+  let exchangeRetrieved = false;
+
+  const fetchRatings = async (exchangeId) => {
+    try {
+      const response = await axios.get(API_ENDPOINTS.ratings + `/exchange/${exchangeId}`, { headers: defaultHeaders });
+      setRatings(response.data);
+      let isRated = !!(response.data.filter(rating => parseInt(rating.owner.id) === parseInt(currentUser.id))[0])
+      setRated(isRated);
+    } catch(e) {
+      console.log(e)
+      setErrors(e.response.data.message);
+    }
+  }
 
   const fetchExchange = async (id) => {
     try {
@@ -50,9 +65,26 @@ export const EditExchangeForm = (props) => {
   }
 
 
+  const rate = () => {
+    navigate(`/ratings/new?entity=exchange&entityId=${exchangeId}`)
+  }
+
+  const deleteRating = async (e) => {
+    if (window.confirm('Are you sure?')) {
+      const id = e.target.dataset.id;
+      try {
+        await axios.delete(API_ENDPOINTS.ratings + `/${id}`,  {headers: defaultHeaders});
+        window.location.reload();
+      } catch(e) {
+        setErrors(e.response.data.message);
+      }
+    }
+  }
+
   useEffect(() => {
     if (!exchange && !exchangeRetrieved) {
       fetchExchange(exchangeId);
+      fetchRatings(exchangeId);
       exchangeRetrieved = true
     }
   }, [exchangeId]);
@@ -113,10 +145,45 @@ export const EditExchangeForm = (props) => {
                       </>
                     )
                   }
+                  { (exchange.state === 'completed' && !rated) && (
+                    <>
+                      <div className="col-sm-1">
+                        <div className="btn btn-info" onClick={rate}>Rate</div>
+                      </div>
+                    </>
+                  )}
                 </>
               ) }
           </div>
         </form>
+        <hr />
+        <div className="row">
+          <ul style={{ listStyleType: 'none' }}>
+            { ratings.map(rating => (
+              <>
+                <li style={{ borderBottom: '1px solid #6c757d'}} >
+                  <div className="row d-flex flex-column">
+                    <div className="col-sm-3">
+                      User: <Link to={`/users/${rating.owner.id}`} className="text-secondary">{ rating.owner.username }</Link>  Rate: { rating.rate }
+                    </div>
+                    <div className="col-sm-6">
+                      { rating.text }
+                    </div>
+                    { rating.owner.id === currentUser.id && (
+                        <>
+                          <div className="col-sm-6 d-inline-flex">
+                            <div style={{ marginRight: '1em'}}><Link to={`/ratings/${rating.id}/edit`} className="text-secondary own-comment">Edit</Link></div>
+                            <div className="text-secondary own-comment" data-id={rating.id} onClick={deleteRating}>Delete</div>
+                          </div>
+                        </>
+                      )
+                    }
+                  </div>
+                </li>
+              </>
+            )) }
+          </ul>
+        </div>
       </>
     )
   } else {
