@@ -1,26 +1,50 @@
-import { Component } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import API_ENDPOINTS, { defaultHeaders } from "../../apiConfig";
 import "./Notification.css";
+import { useLocation } from "react-router-dom";
 
-export class Notification extends Component {
+export const Notification = (props) => {
+  const [show, setShow] = useState(true);
+  const location = useLocation();
+  const {notificationId, text, dismissHandler} = props;
 
-  dismissNotification = async (e) => {
-    const id = e.target.dataset.id
+  const dismissNotification = async (e, notificationId = null) => {
+    if (!notificationId) {
+      notificationId = e.target.dataset.id
+    }
     try {
-      const response = await axios.delete(API_ENDPOINTS.dismissNotification.replace(':id', id), { headers: defaultHeaders })
-      this.props.dismissHandler(this.props.id)
+      const response = await axios.delete(API_ENDPOINTS.dismissNotification.replace(':id', notificationId), { headers: defaultHeaders })
+      dismissHandler(props.notificationId)
     } catch(e) {
       console.log(e);
     }
   }
 
-  render() {
-    return (
-      <li className="btn btn-info border-secondary h4 d-flex justify-content-between align-items-center notification">
-        <span style={{color: 'rgb(147 28 128)', fontWeight: 'bold', fontFamily: 'monospace'}} dangerouslySetInnerHTML={{ __html: this.props.text }}></span>
-        <span aria-hidden="true" className="ml-2" data-id={this.props.id} onClick={this.dismissNotification}>&times;</span>
-      </li>
-    )
+  useEffect(() => {
+    const timeId = setTimeout(() => {
+      setShow(false);
+      dismissNotification(null, props.notificationId);
+    }, 5000)
+
+    return () => {
+      clearTimeout(timeId)
+    }
+  }, [])
+
+  if (!show) {
+    return null;
   }
+
+  if (location.pathname.includes('dialogs') && text.includes('message')) {
+    dismissNotification(null, notificationId);
+    return null;
+  }
+
+  return (
+    <li className="btn alert-info border-secondary h4 d-flex justify-content-between align-items-center notification">
+      <span style={{color: 'rgb(147 28 128)', fontWeight: 'bold', fontFamily: 'monospace'}} dangerouslySetInnerHTML={{ __html: text }}></span>
+      <span aria-hidden="true" className="ml-2" data-id={notificationId} onClick={dismissNotification}>&times;</span>
+    </li>
+  )
 }

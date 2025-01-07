@@ -1,6 +1,6 @@
 import './App.css';
 import { React } from 'react';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, BrowserRouter, useLocation } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { SignUp } from './pages/SignUp';
 import { Login } from './pages/Login';
@@ -19,11 +19,11 @@ import { Book, BookWrapper } from './components/Books/Book';
 import { NotificationsTest } from './pages/NotificationsTest';
 import { Notifications } from './components/Notifications/Notifications';
 import { Exchange } from './components/Exchange/Exchange';
-import { faSleigh } from '@fortawesome/free-solid-svg-icons/faSleigh';
+import { Dialogs } from './pages/Dialogs';
+import { ViewDialog } from './pages/ViewDialog';
 
 function App() {
   const { isAuthenticated } = useAuth();
-
   return (
     <>
       <BrowserRouter>
@@ -45,6 +45,8 @@ function App() {
             <Route path="books/new" element={<Book isNew={true} />} />
             <Route path="exchanges/new" element={<Exchange isNew={true} />} />
             <Route path="exchanges/:id/edit" element={<Exchange isNew={false} />} />
+            <Route path="dialogs" element={<Dialogs />} />
+            <Route path="dialogs/:id" element={<ViewDialog />} />
           </Route>
 
           <Route path="unauthorized" element={<Unauthorized />} />

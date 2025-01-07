@@ -1,0 +1,14 @@
+.dialogs__wrapper ul {
+  list-style-type: none !important;
+  li {
+    background-color: rgba(194, 197, 197, 0.2);
+    font-size: 1.5em;
+    line-height: 3em;
+    padding: 1em;
+  }
+  
+  li:hover {
+    background-color: rgba(0, 228, 228, 0.2);
+    cursor: pointer;
+  }
+}

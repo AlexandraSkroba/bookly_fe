@@ -4,14 +4,32 @@ import axios from "axios";
 import API_ENDPOINTS, { defaultHeaders } from "../apiConfig";
 import { UserAvatar } from "../components/Profile/UserAvatar";
 import { UserNavbar } from "../components/Profile/UserNavbar";
+import { FormErrors } from "../components/FormErrors/FormErrors";
 
 
 export const Profile = (props) => {
   const navigate = useNavigate();
   const [user, setUser ] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [errors, setErrors] = useState([]);
   const userId = useParams().id;
   const isOwner = props?.isOwner;
+  let dialogIsFetching = false;
+
+  const moveToDialog = async () => {
+    if (!dialogIsFetching) {    
+      try {
+        dialogIsFetching = true;
+        const data = { userId: parseInt(userId) };
+        const response = await axios.post(API_ENDPOINTS.dialogs + '/fetch-dialog', data, { headers: defaultHeaders });
+        console.log(response.data)
+        navigate(`/dialogs/${response.data.id}`);
+      } catch(e) {
+        console.log(e)
+        setErrors(e.response.data.message)
+      }
+    }
+  }
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -42,6 +60,15 @@ export const Profile = (props) => {
   return (
     <>
       <UserAvatar userId={user?.id} isOwner={isOwner} />
+      <FormErrors errors={errors} />
+      { !isOwner && (
+          <div className="row text-center mt-2">
+            <div className="col-sm-12">
+              <div className="btn btn-warning" onClick={moveToDialog}>Send Message</div>
+            </div>
+          </div>
+        )
+      }
       <UserNavbar user={user} isOwner={isOwner} />
     </>
   );
