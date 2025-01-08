@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import API_ENDPOINTS, { defaultHeaders } from "../../apiConfig";
 import axios from "axios";
-import { FormErrors } from "../../components/FormErrors/FormErrors";
-import { InputField } from "../../components/InputField";
+import { FormErrors } from "../FormErrors/FormErrors";
+import { InputField } from "../InputField";
+import { RatingsList } from "../Ratings/RatingsList";
 
 export const BookWrapper = () => {
   const location = useLocation();
@@ -20,9 +21,10 @@ export class Book extends Component {
   constructor(props) {
     super(props);
     this.isNew = props.isNew;
-
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.state = {
       book: null,
+      ratings: [],
       isOwner: false,
       title: '',
       author: '',
@@ -34,7 +36,8 @@ export class Book extends Component {
       exchangeState: '',
       owner: '',
       errors: [],
-      notFound: false 
+      notFound: false,
+      reviewed: true 
     };
   }
 
@@ -42,6 +45,7 @@ export class Book extends Component {
     const id = this.props.id;
     if (!this.isNew) {
       await this.fetchBook(id);
+      await this.fetchRatings(id)
     }
   }
 
@@ -68,6 +72,17 @@ export class Book extends Component {
       this.setState({ notFound: true }); 
     }
   };
+
+  fetchRatings = async (id) => {
+    try {
+      const response = await axios.get(API_ENDPOINTS.ratings + `/book/${id}`, { headers: defaultHeaders });
+      this.setState({ ratings: response.data });
+      console.log(response.data);
+      this.setState({ reviewed: !!response.data.filter(rating => rating.owner.id === this.currentUser.id).length })
+    } catch(e) {
+      console.log(e)
+    }
+  }
 
   handleChange = (e) => {
     const { name, value } = e.target;
@@ -144,7 +159,7 @@ export class Book extends Component {
   }
 
   render() {
-    const {book, title, author, genre, language, condition, country, city, exchangeState, owner, errors, isOwner, notFound } = this.state;
+    const {book, ratings, title, author, genre, language, condition, country, city, exchangeState, owner, errors, isOwner, notFound, reviewed } = this.state;
     const disabled = !isOwner && !this.isNew;
 
     if (notFound) {
@@ -269,6 +284,13 @@ export class Book extends Component {
                   </>
                   )
                 }
+                { !reviewed && (
+                  <>
+                    <div className="col-sm-1 mt-3">
+                      <Link to={`/ratings/new?entity=book&entityId=${book.id}`} className="btn btn-info">Review</Link>
+                    </div>
+                  </>
+                )}
               </>) : (
                 <>
                   <div className="col-sm-1">
@@ -282,6 +304,8 @@ export class Book extends Component {
             }
           </div>
         </form>
+        <hr />
+        <RatingsList ratings={ratings} />
       </>
     );
   }

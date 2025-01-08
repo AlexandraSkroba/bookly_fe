@@ -21,6 +21,7 @@ import { Notifications } from './components/Notifications/Notifications';
 import { Exchange } from './components/Exchange/Exchange';
 import { Dialogs } from './pages/Dialogs';
 import { ViewDialog } from './pages/ViewDialog';
+import { RatingForm } from './components/Ratings/RatingForm';
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -47,6 +48,8 @@ function App() {
             <Route path="exchanges/:id/edit" element={<Exchange isNew={false} />} />
             <Route path="dialogs" element={<Dialogs />} />
             <Route path="dialogs/:id" element={<ViewDialog />} />
+            <Route path="ratings/new" element={<RatingForm isNew={true} />} />
+            <Route path="ratings/:id/edit" element={<RatingForm />} />
           </Route>
 
           <Route path="unauthorized" element={<Unauthorized />} />

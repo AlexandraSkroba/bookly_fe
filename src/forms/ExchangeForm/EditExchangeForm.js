@@ -3,15 +3,31 @@ import { FormErrors } from "../../components/FormErrors/FormErrors"
 import { useEffect, useState } from "react";
 import API_ENDPOINTS, { defaultHeaders } from "../../apiConfig";
 import axios from "axios";
+import "./EditExchangeForm.css"
+import { RatingsList } from "../../components/Ratings/RatingsList";
 
 
-export const EditExchangeForm = (props) => {
+export const EditExchangeForm = () => {
   const [errors, setErrors] = useState([]);
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const navigate = useNavigate();
   const exchangeId = useParams().id;
-  let exchangeRetrieved = false;
   const [exchange, setExchange] = useState(null);
+  const [ratings, setRatings] = useState([]);
+  const [rated, setRated] = useState(false);
+  let exchangeRetrieved = false;
+
+  const fetchRatings = async (exchangeId) => {
+    try {
+      const response = await axios.get(API_ENDPOINTS.ratings + `/exchange/${exchangeId}`, { headers: defaultHeaders });
+      setRatings(response.data);
+      let isRated = !!(response.data.filter(rating => parseInt(rating.owner.id) === parseInt(currentUser.id))[0])
+      setRated(isRated);
+    } catch(e) {
+      console.log(e)
+      setErrors(e.response.data.message);
+    }
+  }
 
   const fetchExchange = async (id) => {
     try {
@@ -50,9 +66,14 @@ export const EditExchangeForm = (props) => {
   }
 
 
+  const rate = () => {
+    navigate(`/ratings/new?entity=exchange&entityId=${exchangeId}`)
+  }
+
   useEffect(() => {
     if (!exchange && !exchangeRetrieved) {
       fetchExchange(exchangeId);
+      fetchRatings(exchangeId);
       exchangeRetrieved = true
     }
   }, [exchangeId]);
@@ -113,10 +134,19 @@ export const EditExchangeForm = (props) => {
                       </>
                     )
                   }
+                  { (exchange.state === 'completed' && !rated) && (
+                    <>
+                      <div className="col-sm-1">
+                        <div className="btn btn-info" onClick={rate}>Rate</div>
+                      </div>
+                    </>
+                  )}
                 </>
               ) }
           </div>
         </form>
+        <hr />
+        <RatingsList ratings={ratings} />
       </>
     )
   } else {
