@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import API_ENDPOINTS, { defaultHeaders } from "../../apiConfig";
 import axios from "axios";
 import "./EditExchangeForm.css"
+import { RatingsList } from "../../components/Ratings/RatingsList";
 
 
 export const EditExchangeForm = () => {
@@ -67,18 +68,6 @@ export const EditExchangeForm = () => {
 
   const rate = () => {
     navigate(`/ratings/new?entity=exchange&entityId=${exchangeId}`)
-  }
-
-  const deleteRating = async (e) => {
-    if (window.confirm('Are you sure?')) {
-      const id = e.target.dataset.id;
-      try {
-        await axios.delete(API_ENDPOINTS.ratings + `/${id}`,  {headers: defaultHeaders});
-        window.location.reload();
-      } catch(e) {
-        setErrors(e.response.data.message);
-      }
-    }
   }
 
   useEffect(() => {
@@ -157,33 +146,7 @@ export const EditExchangeForm = () => {
           </div>
         </form>
         <hr />
-        <div className="row">
-          <ul style={{ listStyleType: 'none' }}>
-            { ratings.map(rating => (
-              <>
-                <li style={{ borderBottom: '1px solid #6c757d'}} >
-                  <div className="row d-flex flex-column">
-                    <div className="col-sm-3">
-                      User: <Link to={`/users/${rating.owner.id}`} className="text-secondary">{ rating.owner.username }</Link>  Rate: { rating.rate }
-                    </div>
-                    <div className="col-sm-6">
-                      { rating.text }
-                    </div>
-                    { rating.owner.id === currentUser.id && (
-                        <>
-                          <div className="col-sm-6 d-inline-flex">
-                            <div style={{ marginRight: '1em'}}><Link to={`/ratings/${rating.id}/edit`} className="text-secondary own-comment">Edit</Link></div>
-                            <div className="text-secondary own-comment" data-id={rating.id} onClick={deleteRating}>Delete</div>
-                          </div>
-                        </>
-                      )
-                    }
-                  </div>
-                </li>
-              </>
-            )) }
-          </ul>
-        </div>
+        <RatingsList ratings={ratings} />
       </>
     )
   } else {

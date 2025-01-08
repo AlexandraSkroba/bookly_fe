@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 
 export const RatingForm = (props) => {
   const params = new URLSearchParams(window.location.search);
-  const [rating, setRating] = useState(null);
+  const [ rating, setRating ] = useState(null);
   const [ text, setText ] = useState('');
   const [ rate, setRate ] = useState(1); 
   const [ errors, setErrors ] = useState([]);
@@ -44,9 +44,10 @@ export const RatingForm = (props) => {
       const data = {
         rate: parseInt(rate),
         text,
-        targetType: 'exchange',
+        targetType: props.targetType || params.get('entity') || 'exchange',
         targetId: parseInt(params.get('entityId')) || rating.targetId
       }
+      console.log(data);
       if (props.isNew) {
         await axios.post(API_ENDPOINTS.ratings, data, { headers: defaultHeaders });
         window.history.back();
