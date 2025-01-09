@@ -18,6 +18,7 @@ const API_ENDPOINTS = {
   dismissNotification: `${API_URL}/notifications/:id`,
   currentUser: `${API_URL}/users/current`,
   exchanges: `${API_URL}/exchanges`,
+  delivery: `${API_URL}/exchanges/delivery-state`,
   dialogs: `${API_URL}/dialogs`,
   messages: `${API_URL}/messages`,
   ratings: `${API_URL}/ratings`,
