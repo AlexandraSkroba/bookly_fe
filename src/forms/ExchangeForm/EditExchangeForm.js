@@ -15,7 +15,17 @@ export const EditExchangeForm = () => {
   const [exchange, setExchange] = useState(null);
   const [ratings, setRatings] = useState([]);
   const [rated, setRated] = useState(false);
+  const [delivery, setDelivery] = useState(null);
   let exchangeRetrieved = false;
+
+  const fetchDelivery = async (exchangeId) => {
+    try {
+      const response = await axios.get(API_ENDPOINTS.delivery + `/${exchangeId}`, { headers: defaultHeaders });
+      setDelivery(response.data);
+    } catch(e) {
+      console.log(e)
+    }
+  }
 
   const fetchRatings = async (exchangeId) => {
     try {
@@ -65,7 +75,6 @@ export const EditExchangeForm = () => {
     update(e, 'declined');
   }
 
-
   const rate = () => {
     navigate(`/ratings/new?entity=exchange&entityId=${exchangeId}`)
   }
@@ -74,13 +83,24 @@ export const EditExchangeForm = () => {
     if (!exchange && !exchangeRetrieved) {
       fetchExchange(exchangeId);
       fetchRatings(exchangeId);
+      fetchDelivery(exchangeId);
       exchangeRetrieved = true
     }
-  }, [exchangeId]);
+  }, []);
 
   if (exchange) {
     return (
       <>
+        { (delivery && delivery.id) && (
+            <>
+              <div className="row">
+                <div className="col-sm-12">
+                  <div className="alert alert-info">Book has been { delivery.state }</div>
+                </div>
+              </div>
+            </>
+          )
+        }
         <FormErrors errors={errors} />
         <form>
           <div className="row">
@@ -134,15 +154,15 @@ export const EditExchangeForm = () => {
                       </>
                     )
                   }
-                  { (exchange.state === 'completed' && !rated) && (
+                </>
+              ) }
+            { (exchange.state === 'completed' && !rated) && (
                     <>
                       <div className="col-sm-1">
                         <div className="btn btn-info" onClick={rate}>Rate</div>
                       </div>
                     </>
-                  )}
-                </>
-              ) }
+            )}
           </div>
         </form>
         <hr />
