@@ -22,7 +22,16 @@ const API_ENDPOINTS = {
   dialogs: `${API_URL}/dialogs`,
   messages: `${API_URL}/messages`,
   ratings: `${API_URL}/ratings`,
-  complains: `${API_URL}/complains`,
+  adminUsers: `${API_URL}/admin/users`,
+  adminBooks: `${API_URL}/admin/books`,
+  adminExchanges: `${API_URL}/admin/exchanges`,
+  adminComplaints: `${API_URL}/admin/complaints`,
+  adminSuspend: `${API_URL}/admin/suspend-user`,
+  adminUnsuspend: `${API_URL}/admin/unsuspend-user`,
+  adminUpdateExchange: `${API_URL}/admin/update-exchange`,
+  adminDeleteExchange: `${API_URL}/admin/exchange/:id`,
+  adminResolveComplaint: `${API_URL}/admin/complaints/satisfy`,
+  adminDeleteBook: `${API_URL}/admin/book`
 }
 
 export const defaultHeaders = { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }

@@ -1,6 +1,6 @@
 import './App.css';
 import { React } from 'react';
-import { Routes, Route, BrowserRouter, useLocation } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { SignUp } from './pages/SignUp';
 import { Login } from './pages/Login';
@@ -22,6 +22,7 @@ import { Exchange } from './components/Exchange/Exchange';
 import { Dialogs } from './pages/Dialogs';
 import { ViewDialog } from './pages/ViewDialog';
 import { RatingForm } from './components/Ratings/RatingForm';
+import { Admin } from './pages/Admin';
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -50,6 +51,7 @@ function App() {
             <Route path="dialogs/:id" element={<ViewDialog />} />
             <Route path="ratings/new" element={<RatingForm isNew={true} />} />
             <Route path="ratings/:id/edit" element={<RatingForm />} />
+            <Route path="/admin" element={<Admin />} />
           </Route>
 
           <Route path="unauthorized" element={<Unauthorized />} />
