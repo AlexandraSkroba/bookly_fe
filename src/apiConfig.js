@@ -1,4 +1,4 @@
-export const API_URL = process.env.API_URL || 'http://localhost:3001';
+const API_URL = process.env.API_URL || 'https://bookly-3h4g.onrender.com';
 
 const API_ENDPOINTS = {
   signUp: `${API_URL}/auth/signup`,
