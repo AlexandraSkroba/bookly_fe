@@ -22,6 +22,7 @@ export const Notifications = () => {
   }
 
   const fetchNotifications = async () => {
+    console.log('Fetching notifications', defaultHeaders)
     try {
       const response = await axios.get(API_ENDPOINTS.getNotifications, { headers: defaultHeaders });
       setNotifications(response.data);
